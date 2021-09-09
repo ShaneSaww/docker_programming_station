@@ -1,11 +1,15 @@
-FROM ubuntu:20.10
+FROM debian:bullseye
  ARG USER_NAME
  ARG USER_ID
  ARG GROUP_ID
 # We install some useful packages
  RUN apt-get update -qq
  RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata gnuplot
- RUN apt-get install -y vim ninja-build valgrind golang curl llvm gdb lldb clang-format sudo pip python python-dev wget cmake g++ g++-9 git clang++-9 linux-tools-generic ruby ruby-dev python3-pip  libboost-all-dev r-base-dev r-recommended qpdf devscripts r-cran-remotes
+ RUN apt-get install -y vim ninja-build valgrind golang \ 
+ curl gdb lldb clang-format sudo pip python python-dev \
+ wget cmake g++ g++-9 git clang++-9 linux-perf ruby \
+ ruby-dev openjdk-11-jre-headless gradle python3-pip \
+ libboost-all-dev devscripts software-properties-common
  RUN  pip3 install ipython
 
 # Moar compilers
@@ -16,7 +20,9 @@ FROM ubuntu:20.10
  RUN apt-get install -y clang++-10
  RUN apt-get install -y clang++-11
  RUN apt-get install -y g++-7 g++-8 g++-9 g++-10
+ RUN apt-get install -y openjdk-11-jdk  
  RUN apt-get install -y ruby
+
 
  RUN addgroup --gid $GROUP_ID user; exit 0
  RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID $USER_NAME; exit 0
@@ -31,3 +37,4 @@ FROM ubuntu:20.10
  RUN python3 --version
  RUN pip3 --version
  RUN go version
+ RUN java --version
